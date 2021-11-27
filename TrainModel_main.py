@@ -42,12 +42,12 @@ transform_test = transforms.Compose([
 
 #trainset = torchvision.datasets.CIFAR10(root='./data', train=True, download=False, transform=transform_train)  # 训练数据集
 
-trainset = MyDataset('./data/trainlabel.txt', train = True);
+trainset = MyDataset('./data/trainlabel.txt', train = True, transform = transform_train);
 trainloader = torch.utils.data.DataLoader(trainset, batch_size=BATCH_SIZE, shuffle=True,
                                           num_workers=0)  # 生成一个个batch进行批训练，组成batch的时候顺序打乱取
 
 #testset = torchvision.datasets.CIFAR10(root='./data', train=False, download=False, transform=transform_test)
-testset = MyDataset('./data/testlabel.txt', train = False);
+testset = MyDataset('./data/testlabel.txt', train = False, transform = transform_test);
 testloader = torch.utils.data.DataLoader(testset, batch_size=100, shuffle=False, num_workers=0)
 # Cifar-10的标签
 classes = ('airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
@@ -127,4 +127,6 @@ if __name__ == "__main__":
                         f3.write("EPOCH=%d,best_acc= %.3f%%" % (epoch + 1, acc))
                         f3.close()
                         best_acc = acc
+                        
+            torch.save(net.state_dict(), '%s/net_final.pth'% (args.outf))
             print("Training Finished, TotalEPOCH=%d" % EPOCH)
