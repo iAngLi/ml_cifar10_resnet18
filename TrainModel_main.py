@@ -47,7 +47,7 @@ trainloader = torch.utils.data.DataLoader(trainset, batch_size=BATCH_SIZE, shuff
                                           num_workers=0)  # 生成一个个batch进行批训练，组成batch的时候顺序打乱取
 
 #testset = torchvision.datasets.CIFAR10(root='./data', train=False, download=False, transform=transform_test)
-testset = MyDataset('./data/testlabel.txt', train = False, transform = transform_test);
+testset = MyDataset('./data/trainlabel.txt', train = False, transform = transform_test);
 testloader = torch.utils.data.DataLoader(testset, batch_size=100, shuffle=False, num_workers=0)
 # Cifar-10的标签
 classes = ('airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
