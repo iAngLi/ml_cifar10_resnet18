@@ -128,5 +128,5 @@ if __name__ == "__main__":
                         f3.close()
                         best_acc = acc
                         
-            torch.save(net.state_dict(), '%s/net_final.pth'% (args.outf))
+            torch.save(net.state_dict(), '%s/netRaw_final.pth'% (args.outf))
             print("Training Finished, TotalEPOCH=%d" % EPOCH)
