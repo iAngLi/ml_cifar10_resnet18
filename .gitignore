@@ -107,7 +107,7 @@ output/A/
 output/B/
 
 # doc
-.txt
+*.txt
 
 # model checkpoints
 *.pth
