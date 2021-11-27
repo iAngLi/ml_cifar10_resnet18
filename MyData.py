@@ -5,7 +5,7 @@ import torchvision.transforms as transforms
 import os
 
 traindata_image_path = './data/traindata/'#png图片的地址
-testdata_image_path = './data/testdata/'#png图片的地址
+testdata_image_path = './data/traindata/'#png图片的地址
 
 class MyDataset(Dataset):
  def __init__(self, txt_path, train=True, transform = None, target_transform = None):
@@ -14,7 +14,15 @@ class MyDataset(Dataset):
     self.train_flag = train
     fh = open(txt_path, 'r')
     imgs = []
-    for line in fh:
+    
+    lines = fh.readlines()
+    if self.train_flag is True:
+            lines = lines[:int(0.7*len(lines))]
+    else:
+            lines = lines[int(-0.3*len(lines)):]
+             
+    for line in lines:
+        
         line = line.rstrip()
         words = line.split()
         
