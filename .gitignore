@@ -101,10 +101,9 @@ ENV/
 .mypy_cache/
 
 # project directories
-data/
+#data/
 model/
-output/A/
-output/B/
+output/
 
 # doc
 *.txt
