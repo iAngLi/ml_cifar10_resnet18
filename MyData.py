@@ -4,11 +4,9 @@ from torch.utils.data import Dataset
 import torchvision.transforms as transforms
 import os
 
-traindata_image_path = './data/traindata/'#png图片的地址
-testdata_image_path = './data/traindata/'#png图片的地址
 
 class MyDataset(Dataset):
- def __init__(self, txt_path, train=True, transform = None, target_transform = None):
+ def __init__(self, txt_path, data_path, train=True, transform = None, target_transform = None):
      
     self.data_path = txt_path
     self.train_flag = train
@@ -27,9 +25,9 @@ class MyDataset(Dataset):
         words = line.split()
         
         if self.train_flag is True:
-            words[0] = os.path.join(traindata_image_path,words[0])#拼接图片地址
+            words[0] = os.path.join(data_path,words[0])#拼接图片地址
         else:
-             words[0] = os.path.join(testdata_image_path,words[0])#拼接图片地址
+             words[0] = os.path.join(data_path,words[0])#拼接图片地址
              
         imgs.append((words[0], int(words[1])))
         self.imgs = imgs 
