@@ -11,6 +11,18 @@ from ResNet import ResNet18
 
 from MyData import MyDataset
 
+print('Torch Version:',torch.__version__)
+print('CUDA GPU check:',torch.cuda.is_available())
+
+if(torch.cuda.is_available()):
+ print('CUDA GPU num:', torch.cuda.device_count())
+ n=torch.cuda.device_count()
+while n > 0:
+   print('CUDA GPU name:', torch.cuda.get_device_name(n-1))
+   n -= 1
+print('CUDA GPU index:', torch.cuda.current_device())
+
+
 # 定义是否使用GPU
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -22,7 +34,7 @@ args = parser.parse_args()
 # 超参数设置
 EPOCH = 135  # 遍历数据集次数   135
 pre_epoch = 0  # 定义已经遍历数据集的次数
-BATCH_SIZE = 256  # 批处理尺寸(batch_size)
+BATCH_SIZE = 32  # 批处理尺寸(batch_size)
 LR = 0.01  # 学习率
 
 # 准备数据集并预处理
@@ -46,11 +58,11 @@ traindata_image_path = './data/traindata/'#png图片的地址
 
 trainset = MyDataset('./data/trainlabel.txt',traindata_image_path, train = True, transform = transform_train);
 trainloader = torch.utils.data.DataLoader(trainset, batch_size=BATCH_SIZE, shuffle=True,
-                                          num_workers=4)  # 生成一个个batch进行批训练，组成batch的时候顺序打乱取
+                                          num_workers=8)  # 生成一个个batch进行批训练，组成batch的时候顺序打乱取
 
 #testset = torchvision.datasets.CIFAR10(root='./data', train=False, download=False, transform=transform_test)
 testset = MyDataset('./data/trainlabel.txt',traindata_image_path, train = False, transform = transform_test);
-testloader = torch.utils.data.DataLoader(testset, batch_size=100, shuffle=False, num_workers=4)
+testloader = torch.utils.data.DataLoader(testset, batch_size=32, shuffle=False, num_workers=8)
 # Cifar-10的标签
 classes = ('airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
 
