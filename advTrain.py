@@ -22,7 +22,7 @@ args = parser.parse_args()
 # 超参数设置
 EPOCH = 135  # 遍历数据集次数   135
 pre_epoch = 0  # 定义已经遍历数据集的次数
-BATCH_SIZE = 256  # 批处理尺寸(batch_size)
+BATCH_SIZE = 32  # 批处理尺寸(batch_size)
 LR = 0.01  # 学习率
 
 # 准备数据集并预处理
@@ -46,18 +46,18 @@ testdata_image_path = './data/advdata/'#png图片的地址
 
 trainset = MyDataset('./data/advlabel.txt',testdata_image_path, train = True, transform = transform_train);
 trainloader = torch.utils.data.DataLoader(trainset, batch_size=BATCH_SIZE, shuffle=True,
-                                          num_workers=4)  # 生成一个个batch进行批训练，组成batch的时候顺序打乱取
+                                          num_workers= 2)  # 生成一个个batch进行批训练，组成batch的时候顺序打乱取
 
 #testset = torchvision.datasets.CIFAR10(root='./data', train=False, download=False, transform=transform_test)
 testset = MyDataset('./data/advlabel.txt',testdata_image_path, train = False, transform = transform_test);
-testloader = torch.utils.data.DataLoader(testset, batch_size=100, shuffle=False, num_workers=4)
+testloader = torch.utils.data.DataLoader(testset, batch_size=BATCH_SIZE, shuffle=False, num_workers= 2)
 # Cifar-10的标签
 classes = ('airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
 
 # 模型定义-ResNet
 net = ResNet18().to(device)
 net_path = os.path.join(args.outf, 'netRaw_final.pth')
-net.load_state_dict(torch.load(net_path, map_location='cpu'))
+net.load_state_dict(torch.load(net_path))#, map_location='cpu'
 
 # 定义损失函数和优化方式
 criterion = nn.CrossEntropyLoss()  # 损失函数为交叉熵，多用于多分类问题
