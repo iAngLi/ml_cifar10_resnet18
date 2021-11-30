@@ -3,7 +3,7 @@ from PIL import Image
 from torch.utils.data import Dataset
 import torchvision.transforms as transforms
 import os
-
+import numpy as np
 
 class MyDataset(Dataset):
  def __init__(self, txt_path, data_path, train=True, transform = None, target_transform = None):
@@ -14,10 +14,27 @@ class MyDataset(Dataset):
     imgs = []
     
     lines = fh.readlines()
+    
+    np.random.seed(1)#确保相同的种子得到的随机数序列相同
+    shuffled_index = np.random.permutation(len(lines))
+
+#2：获取划分的边界：
+    split_index = int(len(lines)*0.7)
+
+#3：顺序划分数据集：
+    lines = np.array(lines)[shuffled_index]
+    
+    #train_index = shuffled_index[:split_index]
+    #test_index = shuffled_index[split_index:]
+
+#4：根据划分好的下标，对dataframe数据进行切分：
+    
     if self.train_flag is True:
+            #lines = lines[train_index]
             lines = lines[:int(0.7*len(lines))]
     else:
-            lines = lines[int(-0.3*len(lines)):]
+            #lines = lines[test_index]
+            lines = lines[int(0.7*len(lines)):]
              
     for line in lines:
         
