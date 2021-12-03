@@ -6,7 +6,7 @@ import torch.nn as nn
 import torch.optim as optim
 import torchvision
 import torchvision.transforms as transforms
-from cleverhans.attacks import FastGradientMethod
+import cleverhans as ca
 from ResNet import ResNet18
 
 from MyData import MyDataset
@@ -99,7 +99,7 @@ if __name__ == "__main__":
                     outputs = net(inputs)
  
                     loss = criterion(outputs, labels)
-                    adv = FastGradientMethod(net,inputs.to(device), .1, np.inf).detach().cpu()
+                    adv = ca.attacks.FastGradientMethod(net,inputs.to(device), .1, np.inf).detach().cpu()
                     outputs = net(adv.to(device))
                     loss += criterion(outputs, labels)
                     
