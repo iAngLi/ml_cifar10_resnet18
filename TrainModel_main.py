@@ -6,7 +6,8 @@ import torch.nn as nn
 import torch.optim as optim
 import torchvision
 import torchvision.transforms as transforms
-import cleverhans as ca
+from cleverhans.torch.attacks.fast_gradient_method import fast_gradient_method
+import numpy as np
 from ResNet import ResNet18
 
 from MyData import MyDataset
@@ -99,7 +100,7 @@ if __name__ == "__main__":
                     outputs = net(inputs)
  
                     loss = criterion(outputs, labels)
-                    adv = ca.attacks.FastGradientMethod(net,inputs.to(device), .1, np.inf).detach().cpu()
+                    adv = fast_gradient_method(net,inputs.to(device), .01, np.inf)
                     outputs = net(adv.to(device))
                     loss += criterion(outputs, labels)
                     
