@@ -6,7 +6,7 @@ import torch.nn as nn
 import torch.optim as optim
 import torchvision
 import torchvision.transforms as transforms
-
+from cleverhans.attacks import FastGradientMethod
 from ResNet import ResNet18
 
 from MyData import MyDataset
@@ -58,11 +58,11 @@ traindata_image_path = './data/traindata/'#png图片的地址
 
 trainset = MyDataset('./data/trainlabel.txt',traindata_image_path, train = True, transform = transform_train);
 trainloader = torch.utils.data.DataLoader(trainset, batch_size=BATCH_SIZE, shuffle=True,
-                                          num_workers=8)  # 生成一个个batch进行批训练，组成batch的时候顺序打乱取
+                                          num_workers=4)  # 生成一个个batch进行批训练，组成batch的时候顺序打乱取
 
 #testset = torchvision.datasets.CIFAR10(root='./data', train=False, download=False, transform=transform_test)
 testset = MyDataset('./data/trainlabel.txt',traindata_image_path, train = False, transform = transform_test);
-testloader = torch.utils.data.DataLoader(testset, batch_size=32, shuffle=False, num_workers=8)
+testloader = torch.utils.data.DataLoader(testset, batch_size=BATCH_SIZE, shuffle=False, num_workers=4)
 # Cifar-10的标签
 classes = ('airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
 
@@ -97,7 +97,12 @@ if __name__ == "__main__":
 
                     # forward + backward
                     outputs = net(inputs)
+ 
                     loss = criterion(outputs, labels)
+                    adv = FastGradientMethod(net,inputs.to(device), .1, np.inf).detach().cpu()
+                    outputs = net(adv.to(device))
+                    loss += criterion(outputs, labels)
+                    
                     loss.backward()
                     optimizer.step()
 
