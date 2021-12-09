@@ -106,7 +106,7 @@ if __name__ == "__main__":
  
                     loss = criterion(outputs, labels)
  
-                    adv = fast_gradient_method(net,inputs.to(device), .07, np.inf)
+                    adv = fast_gradient_method(net,inputs.to(device), .1, np.inf)
 
                     
                     outputs = net(adv.to(device))
