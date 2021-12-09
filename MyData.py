@@ -15,11 +15,11 @@ class MyDataset(Dataset):
     
     lines = fh.readlines()
     
-    np.random.seed(1)#确保相同的种子得到的随机数序列相同
+    np.random.seed(253)#确保相同的种子得到的随机数序列相同
     shuffled_index = np.random.permutation(len(lines))
 
 #2：获取划分的边界：
-    split_index = int(len(lines)*0.7)
+    split_index = int(len(lines)*0.72)
 
 #3：顺序划分数据集：
     lines = np.array(lines)[shuffled_index]
@@ -31,10 +31,11 @@ class MyDataset(Dataset):
     
     if self.train_flag is True:
             #lines = lines[train_index]
-            lines = lines[:int(0.7*len(lines))]
+            lines = lines[:int(1*len(lines))]
     else:
             #lines = lines[test_index]
-            lines = lines[int(0.7*len(lines)):]
+            #lines = lines[int(0.72*len(lines)):]
+            lines = lines
              
     for line in lines:
         
